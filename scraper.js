@@ -33,12 +33,13 @@ async function getArticles(webUrl) {
     //const $ = cheerio.load(response.data); 
     //let articles = $(process.env.selector);
 
+    /*
     let response = await fetch(webUrl, { headers });    
     let data = await response.text();
     let $ = cheerio.load(data);
     let articles = $(process.env.selector);
+    */
     
-    /*
     //for puppeteer
     const browser = await puppeteer.launch({ 
       headless: true, //headless:true to hide the browser
@@ -75,7 +76,7 @@ async function getArticles(webUrl) {
     await browser.close();
 
     //==============================
-    */
+    
 
     /*
     articles.each(function () //loop all
