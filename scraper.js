@@ -24,9 +24,11 @@ async function getArticles(webUrl) {
   try {
 
     //for axios
-    //const response = await axios.get(webUrl, { headers: options.headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
-    //const $ = cheerio.load(response.data); 
+    const response = await axios.get(webUrl, { headers: options.headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
+    const $ = cheerio.load(response.data); 
+    let articles = $(process.env.selector);
 
+    /*
     //for puppeteer
     const browser = await puppeteer.launch({ 
       headless: true, //headless:true to hide the browser
@@ -63,6 +65,7 @@ async function getArticles(webUrl) {
     await browser.close();
 
     //==============================
+    */
 
     /*
     articles.each(function () //loop all
