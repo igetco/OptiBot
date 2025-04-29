@@ -27,7 +27,12 @@ async function getArticles(webUrl) {
     //const $ = cheerio.load(response.data); 
 
     //for puppeteer
-    const browser = await puppeteer.launch({ headless: true }); //headless:true to hide the browser
+    const browser = await puppeteer.launch({ 
+      headless: true, //headless:true to hide the browser
+      defaultViewport: null,
+      executablePath: '/usr/bin/google-chrome',
+      args: ['--no-sandbox'], 
+    }); 
 
     let page = await browser.newPage();
     await page.setJavaScriptEnabled(true);
