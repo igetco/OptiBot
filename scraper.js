@@ -97,7 +97,7 @@ async function getArticles(webUrl) {
       const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="...">      
       console.log("articleUrl", articleUrl);
       //console.log($(articles[i]));
-      //await getArticle(articleUrl);
+      await getArticle(articleUrl);
       
     }
 
