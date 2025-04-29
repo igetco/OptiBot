@@ -12,8 +12,12 @@ const ua = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like G
 //const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
 const options = {
   headers: {
-    'user-agent': ua,
+    'User-Agent': ua,
   },
+};
+
+const headers = {
+  'User-Agent': ua
 };
 
 const articleArray = []; //to store the upaths of the updated articles
@@ -24,10 +28,16 @@ async function getArticles(webUrl) {
   try {
 
     //for axios
-    const response = await axios.get(webUrl, { headers: options.headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
-    const $ = cheerio.load(response.data); 
-    let articles = $(process.env.selector);
+    //const response = await axios.get(webUrl, { headers: options.headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
+    //const response = await axios.get(webUrl, { headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
+    //const $ = cheerio.load(response.data); 
+    //let articles = $(process.env.selector);
 
+    let response = await fetch(webUrl, { headers });    
+    let data = await response.text();
+    let $ = cheerio.load(data);
+    let articles = $(process.env.selector);
+    
     /*
     //for puppeteer
     const browser = await puppeteer.launch({ 
