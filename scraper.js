@@ -9,6 +9,7 @@ const puppeteer = require('puppeteer'); //headless Chrome or Chromium browser to
 
 //User-Agent string serves as an identifier sent within HTTP headers to communicate details about the client making a request.
 const ua = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.3";
+//const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
 const options = {
   headers: {
     'user-agent': ua,
@@ -99,19 +100,26 @@ async function getArticle(webUrl) {
     //for axios //axios() somehow does not work in this case, use fetch() instead
     //const response = await axios.get(webUrl);      
     //const $ = cheerio.load(response.data); 
+    const response = await axios.get(webUrl, { headers: options.headers }); 
+    const $ = cheerio.load(response.data); 
 
-    //for fetch    
+    //for fetch   
+    /* 
     let response = await fetch(webUrl);    
     let data = await response.text();
     let $ = cheerio.load(data);
+    */
 
     //In case the website is not read correctly due to error: Enable Javascript and Cookies to continue
     //we read it again and again
     while(!response.ok) {
       console.log("read the url again");
-      response = await fetch(webUrl);
-      data = await response.text();
-      $ = cheerio.load(data);
+      //response = await fetch(webUrl);
+      //data = await response.text();
+      //$ = cheerio.load(data);
+
+      response = await axios.get(webUrl, { headers: options.headers }); 
+      $ = cheerio.load(response.data); 
     }
 
     // Clean up HTML (optional, but recommended)
