@@ -3,8 +3,9 @@ This is a simple project for OptiSigns – OptiBot Mini-Clone.
 
 ## Set up
 
-1. Add `.env` to your project root folder, and update the following variables accordingly:  
+1. Add `.env` to your project root folder, and update the following variables accordingly:
 
+```
 startUrl=https://support.optisigns.com
 selector=.kt-article
 mdFolder=output/md
@@ -14,6 +15,7 @@ timezone=America/Chicago
 OPENAI_API_KEY=***
 ASSISTANT_ID=***
 vectorStoreId=***
+```
 
 ## How to run
 
