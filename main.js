@@ -26,7 +26,7 @@ main(); //run once at startup, then run the schedule below:
 //For example, cron.schedule('0 0-23 * * *', () => { }, { timezone: 'America/Chicago' });
 //minute(0-59) hour(0-23) dayOfMonth(1-31) month(1-12) dayOfWeek(1-7)
 
-cron.schedule('*/1 * * * *', // Schedule task to run every 5 minutes
+cron.schedule('*/10 * * * *', // Schedule task to run every 5 minutes
 //cron.schedule('0 2 * * *', // Schedule task to run every day at specific time (e.g., 2:00 AM)
     main, { 
     scheduled: true,
