@@ -44,7 +44,7 @@ async function getArticles(webUrl) {
     const browser = await puppeteer.launch({ 
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      executablePath: '/usr/bin/google-chrome',
+      //executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     }); 
 
@@ -92,12 +92,13 @@ async function getArticles(webUrl) {
     const maxLength = articles.length >= process.env.numArticles ? process.env.numArticles : articles.length;
     console.log("maxLength ", maxLength);
 
-    for (let i = 0; i < maxLength - 29; i++) {
+    for (let i = 0; i < maxLength; i++) {
       //const articleUrl = webUrl + $(articles[i]).find("a").attr("href"); //for <li class="promoted-articles-item">
-      const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="...">
-      console.log(articleUrl);
-
-      await getArticle(articleUrl);
+      //const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="...">      
+      //console.log("articleUrl", articleUrl);
+      console.log($(articles[i]));
+      //await getArticle(articleUrl);
+      
     }
 
     return articleArray;
