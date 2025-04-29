@@ -31,7 +31,7 @@ async function getArticles(webUrl) {
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
       executablePath: '/usr/bin/google-chrome',
-      args: ['--no-sandbox'], 
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     }); 
 
     let page = await browser.newPage();
