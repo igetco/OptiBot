@@ -39,28 +39,28 @@ async function getArticles(webUrl) {
     let $ = cheerio.load(data);
     let articles = $(process.env.selector);
     */
-    
+
     //for puppeteer
-    const browser = await puppeteer.launch({ 
+    const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
       //executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    }); 
+    });
 
     let page = await browser.newPage();
     await page.setJavaScriptEnabled(true);
     await page.setUserAgent(ua);
     let pageResponse = await page.goto(webUrl);
     console.log("pageResponse.status()", pageResponse.ok());
-    let content = await page.content();    
+    let content = await page.content();
     let $ = cheerio.load(content);
     let articles = $(process.env.selector);
     console.log("articles.length", articles.length);
 
     let maxReloadTime = 5;
     //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
-    while((!pageResponse.ok() || articles.length < process.env.numArticles) && maxReloadTime > 0) { 
+    while ((!pageResponse.ok() || articles.length < process.env.numArticles) && maxReloadTime > 0) {
       console.log("reload page");
       maxReloadTime = maxReloadTime - 1;
 
@@ -76,7 +76,7 @@ async function getArticles(webUrl) {
     await browser.close();
 
     //==============================
-    
+
 
     /*
     articles.each(function () //loop all
@@ -98,7 +98,7 @@ async function getArticles(webUrl) {
       console.log("articleUrl", articleUrl);
       //console.log($(articles[i]));
       await getArticle(articleUrl);
-      
+
     }
 
     return articleArray;
@@ -112,11 +112,49 @@ async function getArticles(webUrl) {
 async function getArticle(webUrl) {
   try {
 
+
+    //for puppeteer
+    const browser = await puppeteer.launch({
+      headless: true, //headless:true to hide the browser
+      defaultViewport: null,
+      //executablePath: '/usr/bin/google-chrome',
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+
+    let page = await browser.newPage();
+    await page.setJavaScriptEnabled(true);
+    await page.setUserAgent(ua);
+    let pageResponse = await page.goto(webUrl);
+    console.log("pageResponse.status()", pageResponse.ok());
+    let content = await page.content();
+    let $ = cheerio.load(content);
+    //let articles = $(process.env.selector);
+    //console.log("articles.length", articles.length);
+
+    let maxReloadTime = 5;
+    //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
+    while (!pageResponse.ok()) {
+      console.log("reload page");
+      //maxReloadTime = maxReloadTime - 1;
+
+      page = await browser.newPage();
+      await page.setJavaScriptEnabled(true);
+      await page.setUserAgent(ua);
+      pageResponse = await page.goto(webUrl);
+      content = await page.content();
+      $ = cheerio.load(content);
+      //articles = $(process.env.selector);
+    }
+
+    await browser.close();
+
+    //==============================
+
     //for axios //axios() somehow does not work in this case, use fetch() instead
     //const response = await axios.get(webUrl);      
     //const $ = cheerio.load(response.data); 
-    const response = await axios.get(webUrl, { headers: options.headers }); 
-    const $ = cheerio.load(response.data); 
+    //const response = await axios.get(webUrl, { headers: options.headers });
+    //const $ = cheerio.load(response.data);
 
     //for fetch   
     /* 
@@ -127,15 +165,17 @@ async function getArticle(webUrl) {
 
     //In case the website is not read correctly due to error: Enable Javascript and Cookies to continue
     //we read it again and again
-    while(!response.ok) {
+    /*
+    while (!response.ok) {
       console.log("read the url again");
       //response = await fetch(webUrl);
       //data = await response.text();
       //$ = cheerio.load(data);
 
-      response = await axios.get(webUrl, { headers: options.headers }); 
-      $ = cheerio.load(response.data); 
+      response = await axios.get(webUrl, { headers: options.headers });
+      $ = cheerio.load(response.data);
     }
+    */
 
     // Clean up HTML (optional, but recommended)
     $('script, style, nav, footer, iframe, .ads').remove();
