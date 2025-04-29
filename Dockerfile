@@ -1,5 +1,5 @@
 # Use Node.js runtime as the base image
-FROM node:18-alpine
+FROM node:18
 
 # We don't need the standalone Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
