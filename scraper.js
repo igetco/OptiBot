@@ -56,7 +56,7 @@ async function getArticles(webUrl) {
       //const articleUrl = webUrl + $(articles[i]).find("a").attr("href"); //for <li class="promoted-articles-item">
       const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="..."> 
       numArticleRead++;   
-      //console.log(articleUrl);      
+      console.log(articleUrl);      
       await getArticle(articleUrl, page, browser);
     }
 
