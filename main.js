@@ -2,36 +2,38 @@ const cron = require('node-cron'); //simplifies scheduling background tasks in y
 
 const { scraper, } = require('./scraper');
 const { uploadFilesToVectorStore, } = require('./uploadAndAttachFilesToVectorStore');
+const { logger, } = require('./logger');
+
+//======================================
 
 async function main() {
 
     try 
     {
-        const articleArray = await scraper(process.env.startUrl);
-        console.log("articleArray", articleArray)
-        if (articleArray) {
-            uploadFilesToVectorStore(process.env.vectorStoreId, articleArray);
+        logger.info('Main started');
+        const articlePaths = await scraper(process.env.START_URL);
+        if (articlePaths) {
+            uploadFilesToVectorStore(process.env.VECTOR_STORE_ID, articlePaths);
         }
     } 
     catch (error) 
     {
-        console.log("main catch", error);
+        logger.error(error);
     }
-
 
 }
 
-main(); //run once at startup, then run the schedule below:
+setTimeout(main, 1000); // Delay execution of main() by 1000 milliseconds (1 second) //run once at startup
 
 //For example, cron.schedule('0 0-23 * * *', () => { }, { timezone: 'America/Chicago' });
 //minute(0-59) hour(0-23) dayOfMonth(1-31) month(1-12) dayOfWeek(1-7)
 
-cron.schedule('*/10 * * * *', // Schedule task to run every 5 minutes
-//cron.schedule('0 2 * * *', // Schedule task to run every day at specific time (e.g., 2:00 AM)
+//cron.schedule(`*/${process.env.HOUR_RUN_AT} * * * *`, // Schedule task to run every 5 minutes
+cron.schedule(`0 ${process.env.HOUR_RUN_AT} * * *`, // Schedule task to run every day at specific time (e.g., 2:00 AM)
     main, { 
     scheduled: true,
-    timezone: process.env.timezone
+    timezone: process.env.TIMEZONE
 });
 
-console.log('Scraper scheduled to run daily.');
+logger.info('Scraper scheduled to run daily.');
   
