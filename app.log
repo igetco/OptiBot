@@ -14,33 +14,3 @@
 2025-04-29 23:48:34 info: 5 articles read. 1 articles skipped.
 2025-04-29 23:48:49 info: 0 new articles. 4 updated articles.
 2025-04-29 23:48:49 info: --------------------
-2025-04-30 00:12:20 info: Scraper scheduled to run daily.
-2025-04-30 00:12:21 info: Main started
-2025-04-30 01:29:40 info: Main started
-2025-04-30 01:29:40 info: Scraper scheduled to run daily.
-2025-04-30 01:30:00 info: Main started
-2025-04-30 01:30:25 info: 2 articles processed. 3 articles uploaded. -1 skipped.
-2025-04-30 01:30:26 info: 2 articles processed. 4 articles uploaded. -2 skipped.
-2025-04-30 01:31:35 info: Main started
-2025-04-30 01:31:35 info: Scraper scheduled to run daily.
-2025-04-30 01:31:53 info: 2 articles processed. 2 articles uploaded. 0 skipped.
-2025-04-30 01:32:00 info: Main started
-2025-04-30 01:32:03 info: 1 new articles. 1 updated articles
-2025-04-30 02:35:30 info: Main started
-2025-04-30 02:35:30 info: Scraper scheduled to run daily.
-2025-04-30 02:35:30 error: Browser was not found at the configured executablePath (/usr/bin/google-chrome)
-2025-04-30 02:36:10 info: Main started
-2025-04-30 02:36:10 info: Scraper scheduled to run daily.
-2025-04-30 02:36:12 info: --------------------
-2025-04-30 02:36:12 info: 0 articles read. 0 articles skipped.
-2025-04-30 02:36:12 info: 0 new articles. 0 updated articles.
-2025-04-30 02:36:12 info: --------------------
-2025-04-30 02:38:05 info: Main started
-2025-04-30 02:38:05 info: Scraper scheduled to run daily.
-2025-04-30 02:38:21 error: ENOENT: no such file or directory, open 'C:\Users\ABC\Desktop\OptiBot with Cron\undefined\35626165056787-How-to-Contact-OptiSigns-Support.md'
-2025-04-30 02:38:32 error: ENOENT: no such file or directory, open 'C:\Users\ABC\Desktop\OptiBot with Cron\undefined\25607930101907-How-to-get-the-most-out-of-your-Digital-Signs.md'
-2025-04-30 02:38:40 error: ENOENT: no such file or directory, open 'C:\Users\ABC\Desktop\OptiBot with Cron\undefined\18823504383891-OptiSigns-Getting-Started-Guide.md'
-2025-04-30 02:38:48 error: ENOENT: no such file or directory, open 'C:\Users\ABC\Desktop\OptiBot with Cron\undefined\1500011891542-How-to-Install-OptiSigns-as-an-APK-File-on-Android-Devices.md'
-2025-04-30 02:38:56 error: ENOENT: no such file or directory, open 'C:\Users\ABC\Desktop\OptiBot with Cron\undefined\1500008112642-How-to-install-OptiSigns-Player-on-Android-Boxes.md'
-2025-04-30 02:39:00 error: ENOENT: no such file or directory, open 'C:\Users\ABC\Desktop\OptiBot with Cron\undefined\14726570281875-How-to-install-OptiSigns-on-Samsung-Tizen-Smart-TVs.md'
-2025-04-30 02:39:05 error: ENOENT: no such file or directory, open 'C:\Users\ABC\Desktop\OptiBot with Cron\undefined\6636047009427-How-to-install-OptiSigns-Player-on-Apple-TV.md'
