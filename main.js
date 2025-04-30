@@ -11,10 +11,10 @@ async function main() {
     try 
     {
         logger.info('Main started');
-        const articlePaths = await scraper(process.env.startUrl);
-        if (articlePaths) {
-            uploadFilesToVectorStore(process.env.vectorStoreId, articlePaths);
-        }
+        // const articlePaths = await scraper(process.env.startUrl);
+        // if (articlePaths) {
+        //     uploadFilesToVectorStore(process.env.vectorStoreId, articlePaths);
+        // }
     } 
     catch (error) 
     {
