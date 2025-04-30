@@ -11,7 +11,7 @@ async function main() {
     try 
     {
         logger.info('Main started');
-        // const articlePaths = await scraper(process.env.startUrl);
+        const articlePaths = await scraper(process.env.startUrl);
         // if (articlePaths) {
         //     uploadFilesToVectorStore(process.env.vectorStoreId, articlePaths);
         // }
