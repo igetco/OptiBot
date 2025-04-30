@@ -15,26 +15,18 @@ let articlePaths = []; //to store the paths of the updated articles
 
 //===============================
 
-async function newBrowserPage(webUrl, browser, page, pageResponse) {
-    page = await browser.newPage();
-    await page.setJavaScriptEnabled(true);
-    await page.setUserAgent(ua);
-    pageResponse = await page.goto(webUrl);
-    const content = await page.content();
-    return content;    
-}
-
 async function getArticles(webUrl) {
   try {
     //launch browser
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      //executablePath: '/usr/bin/google-chrome',
+      executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
     let page = await browser.newPage();
+    page.setDefaultNavigationTimeout(0);
     await page.setJavaScriptEnabled(true);
     await page.setUserAgent(ua);
     let pageResponse = await page.goto(webUrl);
@@ -45,18 +37,14 @@ async function getArticles(webUrl) {
     let maxReloadTime = 5;
     //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
     while ((!pageResponse.ok() || articles.length < process.env.numArticles) && maxReloadTime > 0) {
+      console.log("retry");
       maxReloadTime = maxReloadTime - 1;
-      
-      page = await browser.newPage();
-      await page.setJavaScriptEnabled(true);
-      await page.setUserAgent(ua);
+      await page.reload();
       pageResponse = await page.goto(webUrl);
       content = await page.content();
       $ = cheerio.load(content);
       articles = $(process.env.selector);
     }
-
-    await browser.close(); //close browser
 
     //==============================
 
@@ -68,8 +56,11 @@ async function getArticles(webUrl) {
       //const articleUrl = webUrl + $(articles[i]).find("a").attr("href"); //for <li class="promoted-articles-item">
       const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="..."> 
       numArticleRead++;   
-      await getArticle(articleUrl);
+      //console.log(articleUrl);      
+      await getArticle(articleUrl, page, browser);
     }
+
+    await browser.close(); //close browser
 
     const numArticleSkipped = numArticleRead - articlePaths.length; 
     logger.info('--------------------');
@@ -83,33 +74,11 @@ async function getArticles(webUrl) {
 
 }
 
-async function getArticle(webUrl) {
+async function getArticle(webUrl, page, browser) {
   try {
-    //for puppeteer
-    const browser = await puppeteer.launch({
-      headless: true, //headless:true to hide the browser
-      defaultViewport: null,
-      //executablePath: '/usr/bin/google-chrome',
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
-
-    let page = await browser.newPage();
-    await page.setJavaScriptEnabled(true);
-    await page.setUserAgent(ua);
-    let pageResponse = await page.goto(webUrl);
+    await page.goto(webUrl);
     let content = await page.content();
     let $ = cheerio.load(content);
-
-    while (!pageResponse.ok()) {
-      page = await browser.newPage();
-      await page.setJavaScriptEnabled(true);
-      await page.setUserAgent(ua);
-      pageResponse = await page.goto(webUrl);
-      content = await page.content();
-      $ = cheerio.load(content);
-    }
-
-    await browser.close();
 
     //==============================
 
