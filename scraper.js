@@ -30,7 +30,7 @@ async function getArticles(webUrl) {
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      executablePath: '/usr/bin/google-chrome',
+      //executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -40,11 +40,11 @@ async function getArticles(webUrl) {
     let pageResponse = await page.goto(webUrl);
     let content = await page.content();
     let $ = cheerio.load(content);
-    let articles = $(process.env.SELECTOR);
+    let articles = $(process.env.selector);
 
     let maxReloadTime = 5;
     //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
-    while ((!pageResponse.ok() || articles.length < process.env.NUM_ARTICLES) && maxReloadTime > 0) {
+    while ((!pageResponse.ok() || articles.length < process.env.numArticles) && maxReloadTime > 0) {
       maxReloadTime = maxReloadTime - 1;
       
       page = await browser.newPage();
@@ -53,7 +53,7 @@ async function getArticles(webUrl) {
       pageResponse = await page.goto(webUrl);
       content = await page.content();
       $ = cheerio.load(content);
-      articles = $(process.env.SELECTOR);
+      articles = $(process.env.selector);
     }
 
     await browser.close(); //close browser
@@ -61,7 +61,7 @@ async function getArticles(webUrl) {
     //==============================
 
     //limit the number of articles to process
-    const maxLength = articles.length >= process.env.NUM_ARTICLES ? process.env.NUM_ARTICLES : articles.length;
+    const maxLength = articles.length >= process.env.numArticles ? process.env.numArticles : articles.length;
     articlePaths = []; //reset to empty
     let numArticleRead = 0;
     for (let i = 0; i < maxLength; i++) {
@@ -89,7 +89,7 @@ async function getArticle(webUrl) {
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      executablePath: '/usr/bin/google-chrome',
+      //executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -123,7 +123,7 @@ async function getArticle(webUrl) {
 
     const markdown = turndownService.turndown($.html()); //convert to markdown
 
-    const MD_FOLDER = process.env.MD_FOLDER; // Directory to save Markdown files
+    const MD_FOLDER = process.env.mdFolder; // Directory to save Markdown files
     const fileName = getLastStringFromURL(webUrl);
     const fileNameWithoutExtension = path.parse(fileName).name;
     const fileNameMd = `${fileNameWithoutExtension}.md`;

@@ -41,7 +41,7 @@ async function uploadFilesToVectorStore(vectorStoreId, fileNames) {
 
     //Upload and attach updated files
 
-    const files = fileNames.map((fileName) => fs.createReadStream(process.env.MD_FOLDER + "/" + fileName));
+    const files = fileNames.map((fileName) => fs.createReadStream(process.env.mdFolder + "/" + fileName));
 
     const response = await openai.vectorStores.fileBatches.uploadAndPoll(vectorStoreId, { 
       files: files,
