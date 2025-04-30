@@ -12,9 +12,9 @@ async function main() {
     {
         logger.info('Main started');
         const articlePaths = await scraper(process.env.startUrl);
-        // if (articlePaths) {
-        //     uploadFilesToVectorStore(process.env.vectorStoreId, articlePaths);
-        // }
+        if (articlePaths) {
+            uploadFilesToVectorStore(process.env.vectorStoreId, articlePaths);
+        }
     } 
     catch (error) 
     {
