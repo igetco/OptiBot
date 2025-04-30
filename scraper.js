@@ -30,6 +30,7 @@ async function getArticles(webUrl) {
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
+      executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -88,6 +89,7 @@ async function getArticle(webUrl) {
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
+      executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
