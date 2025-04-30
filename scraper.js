@@ -21,7 +21,7 @@ async function getArticles(webUrl) {
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      executablePath: '/usr/bin/google-chrome',
+      //executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -30,21 +30,22 @@ async function getArticles(webUrl) {
     await page.setJavaScriptEnabled(true);
     await page.setUserAgent(ua);
     let pageResponse = await page.goto(webUrl);
+
+    let maxReloadTimes = 20;
+    //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
+    while (!pageResponse.ok() && maxReloadTimes > 0) {
+      console.log("retry");
+      maxReloadTimes = maxReloadTimes - 1;
+      //await page.reload();
+      pageResponse = await page.goto(webUrl);
+      //content = await page.content();
+      //$ = cheerio.load(content);
+      //articles = $(process.env.selector);
+    }
+
     let content = await page.content();
     let $ = cheerio.load(content);
     let articles = $(process.env.selector);
-
-    let maxReloadTime = 5;
-    //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
-    while ((!pageResponse.ok() || articles.length < process.env.numArticles) && maxReloadTime > 0) {
-      console.log("retry");
-      maxReloadTime = maxReloadTime - 1;
-      await page.reload();
-      pageResponse = await page.goto(webUrl);
-      content = await page.content();
-      $ = cheerio.load(content);
-      articles = $(process.env.selector);
-    }
 
     //==============================
 
@@ -56,7 +57,7 @@ async function getArticles(webUrl) {
       //const articleUrl = webUrl + $(articles[i]).find("a").attr("href"); //for <li class="promoted-articles-item">
       const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="..."> 
       numArticleRead++;   
-      //console.log(articleUrl);      
+      console.log(articleUrl);      
       await getArticle(articleUrl, page, browser);
     }
 
