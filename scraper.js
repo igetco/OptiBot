@@ -1,6 +1,5 @@
 require('dotenv').config(); //simplifies loading environment variables from a .env file into the process.env object.
 const cheerio = require("cheerio"); //for parsing and manipulating HTML and XML on the server-side. It's essentially jQuery for Node.js. 
-const axios = require("axios"); //for making HTTP requests
 const fs = require("fs"); //for interacting with the file system
 
 const TurndownService = require('turndown'); //convert HTML content into Markdown format
@@ -9,18 +8,7 @@ const puppeteer = require('puppeteer'); //headless Chrome or Chromium browser to
 
 const { logger, } = require('./logger');
 
-//User-Agent string serves as an identifier sent within HTTP headers to communicate details about the client making a request.
 const ua = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.3";
-//const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
-const options = {
-  headers: {
-    'User-Agent': ua,
-  },
-};
-
-const headers = {
-  'User-Agent': ua
-};
 
 const articleArray = []; //to store the upaths of the updated articles
 
@@ -28,21 +16,6 @@ const articleArray = []; //to store the upaths of the updated articles
 
 async function getArticles(webUrl) {
   try {
-
-    //for axios
-    //const response = await axios.get(webUrl, { headers: options.headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
-    //const response = await axios.get(webUrl, { headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
-    //const $ = cheerio.load(response.data); 
-    //let articles = $(process.env.selector);
-
-    /*
-    let response = await fetch(webUrl, { headers });    
-    let data = await response.text();
-    let $ = cheerio.load(data);
-    let articles = $(process.env.selector);
-    */
-
-    //for puppeteer
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
