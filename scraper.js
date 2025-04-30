@@ -1,5 +1,6 @@
 require('dotenv').config(); //simplifies loading environment variables from a .env file into the process.env object.
 const cheerio = require("cheerio"); //for parsing and manipulating HTML and XML on the server-side. It's essentially jQuery for Node.js. 
+const axios = require("axios"); //for making HTTP requests
 const fs = require("fs"); //for interacting with the file system
 
 const TurndownService = require('turndown'); //convert HTML content into Markdown format
@@ -10,27 +11,42 @@ const { logger, } = require('./logger');
 
 //User-Agent string serves as an identifier sent within HTTP headers to communicate details about the client making a request.
 const ua = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.3";
+//const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
+const options = {
+  headers: {
+    'User-Agent': ua,
+  },
+};
 
-let articlePaths = []; //to store the paths of the updated articles
+const headers = {
+  'User-Agent': ua
+};
+
+const articleArray = []; //to store the upaths of the updated articles
 
 //===============================
 
-async function newBrowserPage(webUrl, browser, page, pageResponse) {
-    page = await browser.newPage();
-    await page.setJavaScriptEnabled(true);
-    await page.setUserAgent(ua);
-    pageResponse = await page.goto(webUrl);
-    const content = await page.content();
-    return content;    
-}
-
 async function getArticles(webUrl) {
   try {
-    //launch browser
+
+    //for axios
+    //const response = await axios.get(webUrl, { headers: options.headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
+    //const response = await axios.get(webUrl, { headers }); //This can only get partial page (maybe due to <frame> or something). So use pupeteer instead to get full page   
+    //const $ = cheerio.load(response.data); 
+    //let articles = $(process.env.selector);
+
+    /*
+    let response = await fetch(webUrl, { headers });    
+    let data = await response.text();
+    let $ = cheerio.load(data);
+    let articles = $(process.env.selector);
+    */
+
+    //for puppeteer
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      executablePath: '/usr/bin/google-chrome',
+      //executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -38,58 +54,75 @@ async function getArticles(webUrl) {
     await page.setJavaScriptEnabled(true);
     await page.setUserAgent(ua);
     let pageResponse = await page.goto(webUrl);
+    //console.log("pageResponse.status()", pageResponse.ok());
     let content = await page.content();
     let $ = cheerio.load(content);
-    let articles = $(process.env.SELECTOR);
+    let articles = $(process.env.selector);
+    //console.log("articles.length", articles.length);
 
     let maxReloadTime = 5;
     //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
-    while ((!pageResponse.ok() || articles.length < process.env.NUM_ARTICLES) && maxReloadTime > 0) {
+    while ((!pageResponse.ok() || articles.length < process.env.numArticles) && maxReloadTime > 0) {
+      //console.log("reload page");
       maxReloadTime = maxReloadTime - 1;
-      
+
       page = await browser.newPage();
       await page.setJavaScriptEnabled(true);
       await page.setUserAgent(ua);
       pageResponse = await page.goto(webUrl);
       content = await page.content();
       $ = cheerio.load(content);
-      articles = $(process.env.SELECTOR);
+      articles = $(process.env.selector);
+      //console.log("articles.length", articles.length);
     }
 
-    await browser.close(); //close browser
+    await browser.close();
 
     //==============================
 
+
+    /*
+    articles.each(function () //loop all
+    {
+      //const articleUrl = webUrl + $(this).find("a").attr("href"); //for <li class="promoted-articles-item">
+      const articleUrl = $(this).attr("href"); //for <a class="kt-article" href="...">
+      //console.log(articleUrl);
+      await getArticle(articleUrl);
+    });
+    */
+
     //limit the number of articles to process
-    const maxLength = articles.length >= process.env.NUM_ARTICLES ? process.env.NUM_ARTICLES : articles.length;
-    articlePaths = []; //reset to empty
-    let numArticleRead = 0;
+    const maxLength = articles.length >= process.env.numArticles ? process.env.numArticles : articles.length;
+    //console.log("maxLength ", maxLength);
+
     for (let i = 0; i < maxLength; i++) {
       //const articleUrl = webUrl + $(articles[i]).find("a").attr("href"); //for <li class="promoted-articles-item">
-      const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="..."> 
-      numArticleRead++;   
+      const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="...">      
+      //console.log("articleUrl", articleUrl);
+      //console.log($(articles[i]));
       await getArticle(articleUrl);
+
     }
 
-    const numArticleSkipped = numArticleRead - articlePaths.length; 
-    logger.info('--------------------');
-    logger.info(`${numArticleRead} articles read. ${numArticleSkipped} articles skipped.`);
-    
-    return articlePaths;
+    const numArticleSkipped = maxLength - articleArray.length;
+    logger.info(`${maxLength} articles processed. ${articleArray.length} articles uploaded. ${numArticleSkipped} skipped.`);
+    return articleArray;
 
   } catch (error) {
-    logger.error(error);
+    console.error(error);
   }
 
 }
 
 async function getArticle(webUrl) {
   try {
+
+
     //for puppeteer
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      executablePath: '/usr/bin/google-chrome',
+      //executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -97,21 +130,57 @@ async function getArticle(webUrl) {
     await page.setJavaScriptEnabled(true);
     await page.setUserAgent(ua);
     let pageResponse = await page.goto(webUrl);
+    //console.log("pageResponse.status()", pageResponse.ok());
     let content = await page.content();
     let $ = cheerio.load(content);
+    //let articles = $(process.env.selector);
+    //console.log("articles.length", articles.length);
 
+    let maxReloadTime = 5;
+    //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
     while (!pageResponse.ok()) {
+      console.log("reload page");
+      //maxReloadTime = maxReloadTime - 1;
+
       page = await browser.newPage();
       await page.setJavaScriptEnabled(true);
       await page.setUserAgent(ua);
       pageResponse = await page.goto(webUrl);
       content = await page.content();
       $ = cheerio.load(content);
+      //articles = $(process.env.selector);
     }
 
     await browser.close();
 
     //==============================
+
+    //for axios //axios() somehow does not work in this case, use fetch() instead
+    //const response = await axios.get(webUrl);      
+    //const $ = cheerio.load(response.data); 
+    //const response = await axios.get(webUrl, { headers: options.headers });
+    //const $ = cheerio.load(response.data);
+
+    //for fetch   
+    /* 
+    let response = await fetch(webUrl);    
+    let data = await response.text();
+    let $ = cheerio.load(data);
+    */
+
+    //In case the website is not read correctly due to error: Enable Javascript and Cookies to continue
+    //we read it again and again
+    /*
+    while (!response.ok) {
+      console.log("read the url again");
+      //response = await fetch(webUrl);
+      //data = await response.text();
+      //$ = cheerio.load(data);
+
+      response = await axios.get(webUrl, { headers: options.headers });
+      $ = cheerio.load(response.data);
+    }
+    */
 
     // Clean up HTML (optional, but recommended)
     $('script, style, nav, footer, iframe, .ads').remove();
@@ -123,34 +192,37 @@ async function getArticle(webUrl) {
 
     const markdown = turndownService.turndown($.html()); //convert to markdown
 
-    const MD_FOLDER = process.env.MD_FOLDER; // Directory to save Markdown files
+    const mdFolder = process.env.mdFolder; // Directory to save Markdown files
     const fileName = getLastStringFromURL(webUrl);
     const fileNameWithoutExtension = path.parse(fileName).name;
     const fileNameMd = `${fileNameWithoutExtension}.md`;
-    const outputPath = `${MD_FOLDER}/${fileNameMd}`;
+    const outputPath = `${mdFolder}/${fileNameMd}`;
+    //console.log(outputPath)
 
     // Check that the file exists locally
     if (!fs.existsSync(outputPath)) {
+      //console.log("File not found");
       //Creates a new file and writes the provided data to it. 
       fs.writeFileSync(outputPath, markdown, 'utf-8');
-      articlePaths.push(fileNameMd);
+      articleArray.push(fileNameMd);
     }
     else {
+      console.log("File found");
       const existingFile = fs.readFileSync(outputPath, 'utf-8'); //read existing file
       const areEqual = compareMdFilesContent(existingFile, markdown); //compare the content of existing file and the markdown
       if (areEqual) {
-        //console.log('The files are identical.');
+        console.log('The files are identical.');
         //do nothing
       } else {
-        //console.log('The files are different.');
+        console.log('The files are different.');
         //Overwrites the content of the file.
         fs.writeFileSync(outputPath, markdown, 'utf-8');
-        articlePaths.push(fileNameMd);
+        articleArray.push(fileNameMd);
       }
     }
 
   } catch (error) {
-    logger.error(error);
+    console.error(error);
   }
 
 }
@@ -169,7 +241,7 @@ function compareMdFilesContent(file1Content, file2Content) {
   try {
     return file1Content === file2Content;
   } catch (error) {
-    logger.error(error);
+    console.error('An error occurred:', error);
     return false;
   }
 }

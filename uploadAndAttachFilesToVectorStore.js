@@ -16,8 +16,6 @@ async function uploadFilesToVectorStore(vectorStoreId, fileNames) {
  
     if (fileNames.length <= 0) {
       //logger.info('Skip all files.');
-      logger.info('0 new articles. 0 updated articles.');
-      logger.info('--------------------');
       return;
     }
 
@@ -25,36 +23,35 @@ async function uploadFilesToVectorStore(vectorStoreId, fileNames) {
 
     const toBeDeletedList = [];
     const list = await openai.files.list();
+
     for await (const file of list) {
       if (fileNames.includes(file.filename)) {
         toBeDeletedList.push(file.id);
       }
     }
 
-    let  numArticleUpdate = 0;
-
     for await (const fileId of toBeDeletedList) {
       await openai.files.del(fileId);
       //console.log(`Deleted file with ID: ${fileId}`);
-      numArticleUpdate++;
     }
 
-    //Upload and attach updated files
+    //Upload updated files
 
-    const files = fileNames.map((fileName) => fs.createReadStream(process.env.MD_FOLDER + "/" + fileName));
+    const files = fileNames.map((fileName) => fs.createReadStream(process.env.mdFolder + "/" + fileName));
 
-    const response = await openai.vectorStores.fileBatches.uploadAndPoll(vectorStoreId, { 
+    const response = await openai.vectorStores.fileBatches.uploadAndPoll(vectorStoreId, { //openai.beta.vectorStores does not work
       files: files,
     });
 
-    const numArticleNew = response.file_counts.completed - numArticleUpdate;
+    const numArticleUpdate = toBeDeletedList.length;
+    const numArticleNew = fileNames.length - numArticleUpdate;
+    logger.info(`${numArticleNew} new articles. ${numArticleUpdate} updated articles`);
 
-    logger.info(`${numArticleNew} new articles. ${numArticleUpdate} updated articles.`);
-    logger.info('--------------------');
     return response;
     
   } catch (error) {
-    logger.error(error);    
+    console.error('Error uploading files to vector store:', error);
+    throw error;
   }
 
 }
