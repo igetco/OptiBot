@@ -21,7 +21,7 @@ async function getArticles(webUrl) {
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      executablePath: '/usr/bin/google-chrome',
+      //executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -39,7 +39,7 @@ async function getArticles(webUrl) {
     while ((!pageResponse.ok() || articles.length == 0) && maxReloadTime > 0) {
       console.log("retry");
       maxReloadTime = maxReloadTime - 1;
-      //await page.reload();
+      await page.reload();
       pageResponse = await page.goto(webUrl);
       content = await page.content();
       $ = cheerio.load(content);
