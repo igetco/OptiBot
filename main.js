@@ -11,15 +11,14 @@ async function main() {
     try 
     {
         logger.info('Main started');
-        const articleArray = await scraper(process.env.startUrl);
-        console.log("articleArray", articleArray)
-        if (articleArray) {
-            uploadFilesToVectorStore(process.env.vectorStoreId, articleArray);
+        const articlePaths = await scraper(process.env.startUrl);
+        if (articlePaths) {
+            uploadFilesToVectorStore(process.env.vectorStoreId, articlePaths);
         }
     } 
     catch (error) 
     {
-        console.log("main catch", error);
+        logger.error(error);
     }
 
 }
