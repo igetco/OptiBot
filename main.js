@@ -23,7 +23,7 @@ async function main() {
 
 }
 
-setTimeout(main, 1000); // Delay execution of main() by 1000 milliseconds (1 second) //run once at startup
+main();
 
 //For example, cron.schedule('0 0-23 * * *', () => { }, { timezone: 'America/Chicago' });
 //minute(0-59) hour(0-23) dayOfMonth(1-31) month(1-12) dayOfWeek(1-7)
