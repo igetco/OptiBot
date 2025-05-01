@@ -3,7 +3,7 @@ This is the OptiSigns – OptiBot Mini-Clone project. It tries to duplicate the 
 
 ## Set up
 
-1. Add `.env` to your project root folder, and update the following variables accordingly:
+Clone the project. Then add `.env` to your project root folder, and update the following variables accordingly:
 
 ```
 startUrl=https://support.optisigns.com
@@ -20,14 +20,14 @@ vectorStoreId=***
 
 ## How to run
 
-Install packages
+CD to your project root folder, and run the below command to install the packages
 ```
 npm install
 ```
 
 Run server
 ```
-node start
+npm start
 ```
 
 # Project Explanation
@@ -49,7 +49,7 @@ node start
 
 ## App flow
 
-We use CRON to schedule the main.js to run once daily. main.js calls scraper.js and uploadAndAttachFilesToVectorStore.js. scraper.js scrapes and generates md files, then uploadAndAttachFilesToVectorStore.js will upload new/updated files to OpenAI Vector Store. We will check and skip any file that has not changed.
+We use CRON to schedule the main.js to run once daily. main.js calls scraper.js and uploadAndAttachFilesToVectorStore.js. scraper.js scrapes and generates md files, then uploadAndAttachFilesToVectorStore.js will upload new/updated files to OpenAI Vector Store. We will check and skip any file that has no change.
 
 ## Chunking strategy
 
