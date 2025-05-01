@@ -1,4 +1,4 @@
-  Create and Using Schedules with OptiSigns – OptiSigns                      
+  How to Contact OptiSigns Support – OptiSigns                      
 
 [Skip to main content](#main-content)
 
@@ -622,193 +622,82 @@ How To Use Apps
 
 [How to use Notice Board app](https://support.optisigns.com/hc/en-us/articles/360041428353-How-to-use-Notice-Board-app "How to use Notice Board app")[Show/Hide Offline Indicator on your Player](https://support.optisigns.com/hc/en-us/articles/12947820509971-Show-Hide-Offline-Indicator-on-your-Player "Show/Hide Offline Indicator on your Player")[Show Offline Indicator feature](https://support.optisigns.com/hc/en-us/articles/12498801963027-Show-Offline-Indicator-feature "Show Offline Indicator feature")[How to export high resolution canvas, template designs](https://support.optisigns.com/hc/en-us/articles/360060049534-How-to-export-high-resolution-canvas-template-designs "How to export high resolution canvas, template designs")[How to display Google Slide in Portrait Mode](https://support.optisigns.com/hc/en-us/articles/360019710493-How-to-display-Google-Slide-in-Portrait-Mode "How to display Google Slide in Portrait Mode")[How to use Vertical Scrolling Widget](https://support.optisigns.com/hc/en-us/articles/4417056890259-How-to-use-Vertical-Scrolling-Widget "How to use Vertical Scrolling Widget")[How to replace/update an existing asset (image, video, documents)](https://support.optisigns.com/hc/en-us/articles/1500009498782-How-to-replace-update-an-existing-asset-image-video-documents "How to replace/update an existing asset (image, video, documents)")[How to unpair a device, screen?](https://support.optisigns.com/hc/en-us/articles/360058700673-How-to-unpair-a-device-screen "How to unpair a device, screen?")[Set up & add a screen](https://support.optisigns.com/hc/en-us/articles/360016374813-Set-up-add-a-screen "Set up & add a screen")[Assign content to your screens](https://support.optisigns.com/hc/en-us/articles/360016375153-Assign-content-to-your-screens "Assign content to your screens")[Set OptiSigns as ScreenSaver on Windows](https://support.optisigns.com/hc/en-us/articles/360053211594-Set-OptiSigns-as-ScreenSaver-on-Windows "Set OptiSigns as ScreenSaver on Windows")[How to get the list of playlists where the asset is used](https://support.optisigns.com/hc/en-us/articles/4472060158355-How-to-get-the-list-of-playlists-where-the-asset-is-used "How to get the list of playlists where the asset is used ") [How to Use Weather Apps Based on Device Location](https://support.optisigns.com/hc/en-us/articles/4408052029587-How-to-Use-Weather-Apps-Based-on-Device-Location "How to Use Weather Apps Based on Device Location")[How to add a QR Code in designs using OptiSigns’ Designer](https://support.optisigns.com/hc/en-us/articles/25127398699667-How-to-add-a-QR-Code-in-designs-using-OptiSigns-Designer "How to add a QR Code in designs using OptiSigns’ Designer")
 
-# Create and Using Schedules with OptiSigns
+# How to Contact OptiSigns Support
 
-### OptiSigns offers flexible and powerful scheduling options, allowing you to schedule your content on a calendar. Schedule events to recur daily, on specific days and times, or any way you wish.
+**Email Support:** [support@optisigns.com](mailto:support@optisigns.com)
 
-**In this article, we will cover:**
+**Email Support Hours:** 7AM - 7PM US CDT
 
-*   [Creating a Schedule](#Create)
-*   [Generating a Recurring Schedule](#Generate)
-*   [Copying a Schedule](#Copy)
-*   [Handling Overlapping Schedules](#Overlapping)
-*   [Scheduling Around Time Zones](#Time)
-*   [Setting Live-Expire for your Schedules](#Set)
-*   [Assigning a Schedule to Your Screens](#Assign)
-*   [Playlist Item Scheduling](#Playlist)
-*   [Frequently Asked Questions About Schedules](#Common)
+**Phone Support:** +1 (832) 410-8132
 
-* * *
+**Phone Support Hours:** 9AM - 5PM US CDT
 
-## Creating a Schedule
+Having trouble with your screens? Try these common [troubleshooting steps](https://links.optisigns.com/pQ4C).
 
-*   Click on the Schedule tab on the top navigation bar.
-*   Click **Create Schedule**.
-*   Rename the schedule by clicking on its name.
-*   Add an event by clicking the **Add Event** button or by dragging and selecting the calendar view to create a schedule at your desired time.
-*   Fill out the details of your schedule item:  
-    *   Use assets or playlists in your schedules.
-    *   Fine-tune the time and set it to repeat daily, weekly, etc., or not at all.
-*   Click **Save**.
+Outside support hours? Submit a [New Ticket Request](https://links.optisigns.com/new-ticket).
 
-Your schedule item is created. You can edit the schedule item or add more schedule items as needed. It will look something like this:
+Our Support team is primarily based in **Houston, TX.**
 
-[![](/hc/article_attachments/30102229437587)](/hc/article_attachments/30102229437587)
+Support options are based on your [product plan](https://www.optisigns.com/pricing).
 
-* * *
-
-## Generating a Recurring Schedule
-
-Follow the steps in the "Create a Schedule" section.
-
-*   **Set Recurrence:**
-    *   Choose from options like:
-        *   Repeat Daily
-        *   Repeat Weekly (you can select specific days like Sunday, Monday, etc.)
-        *   Repeat Monthly (on a specific date each month)
-    *   Create a Custom Recurrence:
-        *   Click on the **Custom** option.
-        *   Set up a more tailored schedule, such as repeating every other day, or specific days of the week on a bi-weekly basis.
-        *   Define the recurrence pattern according to your needs.
-*   Save the Recurring Schedule: After setting the recurrence pattern, click **Save** to finalize the recurring schedule.
-
-[![](/hc/article_attachments/30102229446803)](/hc/article_attachments/30102229446803)
-
-* * *
-
-## Copying a Schedule
-
-*   Navigate to Schedules: Click on **Schedules** from the top menu.
-*   Select a Schedule: Choose the schedule you want to copy from the list.
-*   Copy Schedule: Click on the **Duplicate Schedule** button located at the top of the schedule.
-*   A copy of the schedule will populate. You can modify the copied schedule as desired.
-
-[![](/hc/article_attachments/30102222641555)](/hc/article_attachments/30102222641555)
-
-* * *
-
-## Handling Overlapping Schedules
-
-When creating or editing schedules, OptiSigns will notify you of any overlaps.
-
-**Types of Overlaps:**
-
-*   **Unintentional Overlaps:**
     
-    *   Adjust the start and end times of the schedules to ensure there are no conflicts.
-*   **Intentional Overlaps:**
-    
-    *   The last updated schedule will take priority during the conflicted time.
 
-[![](/hc/article_attachments/30102222645139)](/hc/article_attachments/30102222645139)
+ 
 
-* * *
+**Email**
 
-## Scheduling Around Time Zones
+**Phone**
 
-The screens/devices will play according to their local time zones.
+**Zoom**
 
-**Example:**
+**Dedicated Account Manager**
 
-*   You (and your computer) are in the CST time zone (GMT - 6).
-*   Device 1 is in the EST time zone (GMT - 5).
-*   Device 2 is in the PST time zone (GMT - 8).
+**Free**
 
-You set a schedule item to play from 10 AM to 11 AM on 1/1/20XX.
+ 
 
-*   Device 1 will play the schedule item from 10 AM to 11 AM on 1/1/20XX in its local time (EST).
-*   Device 2 will play the schedule item from 10 AM to 11 AM on 1/1/20XX in its local time (PST).
+ 
 
-Daylight saving time adjustments will be handled automatically.
+ 
 
-* * *
+ 
 
-## Setting Live-Expire for Your Schedules
+**Standard**
 
-You can use the [Set Asset to Live & Expire](/hc/en-us/articles/360042736794) feature to schedule content to go live or expire on specific dates.
+✔
 
-* * *
+ 
 
-## Assigning a Schedule to Your Screens
+ 
 
-There are two ways to assign a schedule to your screens.
+ 
 
-**Method 1:**
+**Pro Plus**
 
-1.  *   Navigate to Screens: Click on the **Screens** tab.
-    *   Select Screen: Click **Edit** on the screens you'd like to assign the schedule to.
-    *   Assign Schedule: In the Edit Screen modal:
-        *   Select **Type = Schedule**.
-        *   Select the schedule you just created from the list of available schedules.
-    *   Click **Save**.
+✔
 
-[![](/hc/article_attachments/30102229471891)](/hc/article_attachments/30102229471891)
+✔
 
-**Method 2:**
+✔
 
-*   Navigate to Schedule: Click on the **Schedules** tab.
-*   Select Schedule: Select the schedule you would like to push to the screen(s).
-*   Push to Screen: Click on the **Push to Screen** icon on the top menu of your schedule.
+ 
 
-[![](/hc/article_attachments/30102222658963)](/hc/article_attachments/30102222658963)
+**Engage**
 
-* * *
+✔
 
-## Playlist Item Scheduling
+✔
 
-Playlist item scheduling is a great tool for tailoring your content to different times of the day, week, or even specific dates.
+✔
 
-*   Create or Edit Playlist: Select the playlist you want to manage.
-*   Schedule Items: For each item in the playlist, set specific start and end times or days when they should be displayed.
-*   Save Playlist: Click **Save** to apply the item-specific scheduling.
+ 
 
-* * *
+**Enterprise**
 
-## Frequently Asked Questions About Schedules
+✔
 
-**What if there is a one-time schedule overlapping a recurring schedule?**
+✔
 
-The one-time schedule will take priority.
+✔
 
-**Example:**
-
-*   Recurring schedule A (9 AM - 5 PM daily) overlaps with a one-time schedule B (10 AM - 11 AM) today.
-
-**Playback Order:**
-
-*   9 AM - 10 AM: Recurring schedule A
-*   10 AM - 11 AM: Single schedule B
-*   11 AM - 5 PM: Recurring schedule A resumes
-
-**What if there are two recurring schedules overlapping?**
-
-The most recently created/ updated schedule will take priority.
-
-**What happens when there's nothing scheduled?**
-
-If there is no scheduled content, the screen will display a black screen by default. To avoid this, you can set default content. There are two ways to do this:
-
-*   **At the Schedule Level:** Edit the specific schedule, click on **Settings**, and select your preferred default content (None, Account Default, Asset, or Playlist).
-
-[![](/hc/article_attachments/30102222667539)](/hc/article_attachments/30102222667539)
-
-*   **At the Account Level:** Apply a default content setting that will apply to all newly created schedules. The schedule-level setting will take priority if both are set.
-
-[![](/hc/article_attachments/30102229493651)](/hc/article_attachments/30102229493651)
-
-For detailed information, visit: [Assign Default Content for Schedules](/hc/en-us/articles/360040943374)
-
-**Can I move an existing schedule to a folder I created?**  
-Yes, you can click on **Move Schedule** on the top of the Schedule menu and then select the folder you wish to move the schedule to.
-
-[![](/hc/article_attachments/30102222683027)](/hc/article_attachments/30102222683027)
-
-**Is it possible to manage schedules for multiple locations from a single interface?**Yes, users can manage schedules for multiple locations from a central interface. This is particularly useful for organizations with screens in different geographical areas.
-
-* * *
-
-**That's it!**
-
-Related to
-
-*   [schedule](/hc/en-us/search?content_tags=01HZR35SKS3J36TNQ93YFRVDS2&utf8=%E2%9C%93 "Search results")
+✔

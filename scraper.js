@@ -4,12 +4,34 @@ const fs = require("fs"); //for interacting with the file system
 
 const TurndownService = require('turndown'); //convert HTML content into Markdown format
 const path = require('path'); //for joining paths, normalizing paths, extracting directories, and more.
-const puppeteer = require('puppeteer'); //headless Chrome or Chromium browser to automate browser tasks such as, Web scraping: Extracting data from websites.
+const puppeteer = require('puppeteer'); //provides an API to programmatically control Chrome or Chromium browser to automate browser tasks such as, Web scraping: Extracting data from websites.
 
 const { logger, } = require('./logger');
 
 //User-Agent string serves as an identifier sent within HTTP headers to communicate details about the client making a request.
 const ua = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.3";
+
+const userAgentList = [
+  'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.3',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
+];
+
+const headersList = [
+  {
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Upgrade-Insecure-Requests': '1',
+  },
+  {
+    'Accept-Language': 'fr-FR,fr;q=0.9',
+    'Upgrade-Insecure-Requests': '1',
+  },
+  {
+    'Accept-Language': 'es-ES,es;q=0.9',
+    'Upgrade-Insecure-Requests': '1',
+  },
+];
 
 let articlePaths = []; //to store the paths of the updated articles
 
@@ -21,50 +43,58 @@ async function getArticles(webUrl) {
     const browser = await puppeteer.launch({
       headless: true, //headless:true to hide the browser
       defaultViewport: null,
-      //executablePath: '/usr/bin/google-chrome',
+      //executablePath: '/usr/bin/google-chrome', //not needed, just for reference
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
-    let page = await browser.newPage();
+    const page = await browser.newPage();
     page.setDefaultNavigationTimeout(0);
     await page.setJavaScriptEnabled(true);
-    await page.setUserAgent(ua);
-    let pageResponse = await page.goto(webUrl);
+    //Rotate User-Agents
+    const randomUserAgent = userAgentList[Math.floor(Math.random() * userAgentList.length)];
+    await page.setUserAgent(randomUserAgent); 
+    //Rotating Browser Headers
+    const randomHeaders = headersList[Math.floor(Math.random() * headersList.length)];
+    await page.setExtraHTTPHeaders(randomHeaders);
+
+    //The 'networkidle2' option ensures that Puppeteer waits until there are no more than two network connections for at least 500 ms.
+    //This is particularly useful for pages that load additional content dynamically.  
+    //Without 'networkidle2' option, we cannot get all the dynamic contents.  
+    //pages with dynamically loaded content may require multiple attempts and retries at intervals to retrieve all elements.
+    let pageResponse = await page.goto(webUrl, { waitUntil: 'networkidle2' });
     let content = await page.content();
     let $ = cheerio.load(content);
-    let articles = $(process.env.selector);
+    let articles = $(process.env.selector); //length for now is 800 articles
 
-    let maxReloadTime = 20;
     //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
-    while ((!pageResponse.ok() || articles.length == 0) && maxReloadTime > 0) {
+    let maxReloadTime = 5;    
+    while ((!pageResponse.ok() || articles.length < process.env.numArticles) && maxReloadTime > 0) {
       console.log("retry");
       maxReloadTime = maxReloadTime - 1;
-      await page.reload();
-      pageResponse = await page.goto(webUrl);
+      pageResponse = await page.goto(webUrl, { waitUntil: 'networkidle2' });
       content = await page.content();
       $ = cheerio.load(content);
       articles = $(process.env.selector);
     }
-
+    
     //==============================
 
-    //limit the number of articles to process
+    //length for now is 800 articles; for testing, here we limit the number of articles to process to 30, specified in .env
     const maxLength = articles.length >= process.env.numArticles ? process.env.numArticles : articles.length;
     articlePaths = []; //reset to empty
-    let numArticleRead = 0;
     for (let i = 0; i < maxLength; i++) {
       //const articleUrl = webUrl + $(articles[i]).find("a").attr("href"); //for <li class="promoted-articles-item">
-      const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="..."> 
-      numArticleRead++;   
-      console.log(articleUrl);      
-      await getArticle(articleUrl, page, browser);
+      const articleUrl = $(articles[i]).attr("href"); //for <a class="kt-article" href="...">  
+      console.log((i+1), articleUrl);      
+      await getArticle(articleUrl, page);
     }
 
     await browser.close(); //close browser
 
+    const numArticleRead = maxLength;
     const numArticleSkipped = numArticleRead - articlePaths.length; 
     logger.info('--------------------');
-    logger.info(`${numArticleRead} articles read. ${numArticleSkipped} articles skipped.`);
+    logger.info(`${numArticleRead} articles read: ${numArticleSkipped} articles skipped.`);
     
     return articlePaths;
 
@@ -74,11 +104,22 @@ async function getArticles(webUrl) {
 
 }
 
-async function getArticle(webUrl, page, browser) {
+async function getArticle(webUrl, page) {
   try {
-    await page.goto(webUrl);
+    let pageResponse = await page.goto(webUrl, { waitUntil: 'networkidle2' });
     let content = await page.content();
     let $ = cheerio.load(content);
+
+    //In case puppeteer fails to read correctly the first time, it will try again at most 5 times
+    let maxReloadTime = 5;    
+    while ((!pageResponse.ok()) && maxReloadTime > 0) {
+      console.log("retry");
+      maxReloadTime = maxReloadTime - 1;
+      pageResponse = await page.goto(webUrl, { waitUntil: 'networkidle2' });
+      content = await page.content();
+      $ = cheerio.load(content);
+      articles = $(process.env.selector);
+    }
 
     //==============================
 
